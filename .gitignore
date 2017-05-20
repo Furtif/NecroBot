@@ -157,8 +157,6 @@ PublishScripts/
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
-# and except awesomium, which is not a nuget package
-!**/packages/Awesomium.1.7.5.1/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
 # NuGet v3's project.json files produces more ignoreable files
@@ -191,6 +189,7 @@ ClientBin/
 *~
 *.dbmdl
 *.dbproj.schemaview
+*.pfx
 *.publishsettings
 node_modules/
 orleans.codegen.cs
@@ -253,6 +252,8 @@ paket-files/
 .idea/
 *.sln.iml
 
-node_modules
-PoGo.NecroBot.GUI.Electron/dist
+# CodeRush
+.cr/
+[Pp]oGo.NecroBot.GUI.Electron/plugins
+[Pp]oGo.NecroBot.GUI.Electron/platforms
 !packages/Google.Api*

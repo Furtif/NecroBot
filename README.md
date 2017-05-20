@@ -1,48 +1,50 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/g1dtrcdnjjbxugw6?svg=true)](https://ci.appveyor.com/project/jjskuld/necrobot/branch/master)
-[![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
-[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
+﻿
+<!-- define variables -->
+[1.1]: http://i.imgur.com/M4fJ65n.png (ATTENTION)
+[1.2]: https://discordapp.com/api/guilds/208485545439920128/widget.png?style=banner2 (DISCORD)
 
-<h1>Necrobot2 is now compatible with 0.63.1 API.</h1>
+
+<!-- disclaimer -->
+[![Build status](https://ci.appveyor.com/api/projects/status/jkcqmoxr5wvo3vrq/branch/master?svg=true)](https://ci.appveyor.com/project/RocketBot/rocketbot/branch/master) 
+[![Github All Releases](https://img.shields.io/github/downloads/TheUnnamedOrganisation/RocketBot/total.svg?maxAge=250)](https://github.com/TheUnnamedOrganisation/RocketBot/releases) 
+[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/TheUnnamedOrganisation/RocketBot/master/LICENSE.md) 
+
+[![Stories in Ready](https://badge.waffle.io/TheUnnamedOrganisation/RocketBot.png?label=backlog&title=Backlog)](http://waffle.io/TheUnnamedOrganisation/RocketBot) 
+[![Stories in Ready](https://badge.waffle.io/TheUnnamedOrganisation/RocketBot.png?label=ready&title=Ready)](http://waffle.io/TheUnnamedOrganisation/RocketBot) 
+[![Stories in Ready](https://badge.waffle.io/TheUnnamedOrganisation/RocketBot.png?label=in%20progress&title=In%20Progress)](http://waffle.io/TheUnnamedOrganisation/RocketBot) 
+[![Stories in Ready](https://badge.waffle.io/TheUnnamedOrganisation/RocketBot.png?label=done&title=Done)](http://waffle.io/TheUnnamedOrganisation/RocketBot)
+
+![alt text][1.1] <strong><em>`The contents of this repo are a proof of concept and are for educational use only`</em></strong>![alt text][1.1]<br/>
+
+<h1>RocketBot2 is now compatible with 0.63.1 API.</h1>
 
 <p>
-Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.
+RocketBot itself is free but now you will need to purchase an API key to run the bot.
 <br/>
 See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
 </p>
 
-<a href="">
-    <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="450">
-</a>
+[![Stories in Ready](https://discordapp.com/api/guilds/208485545439920128/widget.png?style=banner3&time-)](https://discord.gg/y6EU2qY)
 
-[![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner3&time-)](https://discord.gg/7FWyWVp)
+### `Download`
+Download the bot from the [release](https://github.com/TheUnnamedOrganisation/RocketBot/releases) tab.  
+If you want the latest Beta-Build, you have to download the build from the Beta-Build branch and compile them by yourself with VisualStudio 2017.
 
-<strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
+### `Dependencies`
+ - Microsoft [.NET 4.6.2 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=53321)
+ - Windows 
+ - PogoDev ApiKey valid to get one here [Buy](https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer)
 
-## `Screenshots`
+### `Translations`
+If you wanted to participate in translations I invite you to click [here](https://github.com/TheUnnamedOrganisation/RocketBot/tree/master/RocketBot2/Config/Translations) edit the file then proposed your translation it will be tested before publishing.
 
-- Electron Web UI App
+**Waning: Beta are unstable and might cause damage to your account, use at your own risk**
 
-<img src="http://i.imgur.com/Ph1sU94r.png" width="430">
-<img src="http://i.imgur.com/4Dj2RjNr.png" width="430">
+<img src="https://cdn.discordapp.com/attachments/208485545439920128/298918598234341386/MainForm.png" alt="RocketBot2">
 
-- All in One Windows GUI App
+## `Developers and Contributors`
 
-<img src="http://image.prntscr.com/image/fd77f0500e4f4a1cb4c8ff78e22b85c4.png" width="430">
-<img src="http://image.prntscr.com/image/016259c838da4dfdb334195f0aa47f70.png" width="430">
-
-- Console App
-
-<img src="http://i.imgur.com/z6UfTm8.png" width="430">
-
-## `Getting Started`
-
-Please visit our website [http://necrobot2.com](http://necrobot2.com) to find some tips for setup and running.
-
-<br/>
-
-## Developers and Contributors
-
-### Requirements
+### `Requirements`
 
 To contribute to development, you will need to download and install the required software first.
 
@@ -50,34 +52,46 @@ To contribute to development, you will need to download and install the required
 - [Visual Studio 2017](https://www.visualstudio.com/vs/whatsnew/) - We are using C# 7.0 code so VS 2017 is required to compile.  VS 2015 or older will not be able to compile the code.
 - [.NET 4.6.2 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=53321)
 
-### Cloning Source Code
+### `Cloning Source Code`
 
 Next, you need to get the source code.  This source code repository uses git submodules. So when you clone the source code, you will need to clone recursively:
 
 ```
-git clone --recursive https://github.com/Necrobot-Private/NecroBot.git
+git clone --recursive https://github.com/TheUnnamedOrganisation/RocketBot.git
 ```
 
 Or if you already cloned without the recursive option, you can update the submodules by running:
 
 ```
-git clone --recursive https://github.com/Necrobot-Private/NecroBot.git
-cd NecroBot
+git clone --recursive https://github.com/TheUnnamedOrganisation/RocketBot.git
+cd RocketBot
 git submodule update --init --recursive
 ```
 
-## Third Party Dependencies
+ You can contribute in many ways, here are some that you can do to help the project out!
 
-NecroBot uses DotNetBrowser http://www.teamdev.com/dotnetbrowser, which is a proprietary software. The use of DotNetBrowser is governed by DotNetBrowser Product Licence Agreement http://www.teamdev.com/jxbrowser-licence-agreement. If you would like to use DotNetBrowser in your development, please contact TeamDev.
+### `Join discord channel and help answer questions`
+ We have more and more users everyday, so we have a lot of questions from new users who haven't fully understand how the bot works yet. If you want to help them out, join our official discord channel :)
 
-## [Credits](http://pastebin.com/Yh4ynXbv)
+### `Answer questions in` [issues](https://github.com/TheUnnamedOrganisation/RocketBot/issues)
+ Same as above, you can help by answering questions in the [issues](https://github.com/TheUnnamedOrganisation/RocketBot/issues) tab!
 
-## `Legal Disclaimer`
+### `Report bugs`
+ Report bugs you found in [issues](https://github.com/TheUnnamedOrganisation/RocketBot/issues).  
+In order to help us fix the problem, please take a screenshot of the error you get and also attach your log file (under the Logs folder) as well. Add [Bug] to the title to help us quickly identify the category of the issue.
+
+### `Suggestions/ideas`
+ Tell us what you think we can do better in [issues](https://github.com/TheUnnamedOrganisation/RocketBot/issues).  
+Give detailed discription to help us understand what you are looking for. Add [Suggestion] to the title to help us quickly identify the category of the issue. Your suggestion might not be accept, but hey, maybe we will accept your suggestion next time! :)
+
+### `Legal Disclaimer`
 
 This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
 
-<h2>Using this project for anything other than education, testing or research is not advised.</h2>
+#### Using this project for anything other than education, testing or research is not advised.
 
 This is not a public release, just a project with releases for code testers for education and research on any privacy issues for the end user.
 
-<hr/>
+## `A Pokémon Go bot in C#`
+
+## [Credits](https://github.com/Necrobot-Private)

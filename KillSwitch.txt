@@ -1,13 +1,12 @@
-﻿BotStatus=ENABLE;
+﻿BotStatus=ENABLED;
 //============================================//
-              POKEMON GO 0.63.0
+               POKEMON GO 0.63.1
 //============================================//
 
-    Necrobot is now compatible with 0.63.0 API.
+RocketBot2 is compatible with 0.63.1 API.
 
 //============================================//
-              Updated: 5/20/2017
-
+               Updated: 5/20/2017
 
 For support/questions:
-OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
+OFFICIAL ROCKETBOT2 Discord: https://discord.gg/y6EU2qY
