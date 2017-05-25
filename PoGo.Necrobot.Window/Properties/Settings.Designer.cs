@@ -73,6 +73,18 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public double MapZoom {
+            get {
+                return ((double)(this["MapZoom"]));
+            }
+            set {
+                this["MapZoom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1366")]
         public double Width {
             get {
@@ -145,13 +157,13 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16")]
-        public double MapZoom {
+        [global::System.Configuration.DefaultSettingValueAttribute("Default")]
+        public string ConsoleTheme {
             get {
-                return ((double)(this["MapZoom"]));
+                return ((string)(this["ConsoleTheme"]));
             }
             set {
-                this["MapZoom"] = value;
+                this["ConsoleTheme"] = value;
             }
         }
     }

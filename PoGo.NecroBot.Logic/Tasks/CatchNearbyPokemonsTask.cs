@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Linq;
@@ -63,7 +63,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForPokemon), LogLevel.Debug);
 
             var nearbyPokemons = await GetNearbyPokemons(session).ConfigureAwait(false);
+
+            Logger.Write($"There are {nearbyPokemons.Count()} pokemon nearby.", LogLevel.Debug);
+
             if (nearbyPokemons == null) return;
+
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons = nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
 
@@ -98,15 +102,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
+            var allitems = await session.Inventory.GetItems().ConfigureAwait(false);
+            var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
+            var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
+            var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
+            var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count;
+            masterBallsCount =
+                masterBallsCount ?? 0; //return null ATM. need this code to logic check work
+            var PokeBalls = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
+
+            if (0 < pokemons.Count && PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)
+                Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
+
             foreach (var pokemon in pokemons)
             {
                 await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 
+                /*
                 if (LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
                 {
                     Logger.Debug($"THIS POKEMON IS TOO FAR, {pokemon.Latitude}, {pokemon.Longitude}");
                     continue;
                 }
+                */
+
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 
@@ -115,15 +134,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }
 
-                var allitems = await session.Inventory.GetItems().ConfigureAwait(false);
-                var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
-                var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
-                var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
-                var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count;
-                masterBallsCount =
-                    masterBallsCount ?? 0; //return null ATM. need this code to logic check work
-
-                if (pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount <
+                if (PokeBalls <
                     session.LogicSettings.PokeballsToKeepForSnipe && session.CatchBlockTime < DateTime.Now)
                 {
                     session.CatchBlockTime = DateTime.Now.AddMinutes(session.LogicSettings.OutOfBallCatchBlockTime);
@@ -144,9 +155,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue;
                 }
 
+                /*
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, pokemon.Latitude, pokemon.Longitude);
                 await Task.Delay(distance > 100 ? 500 : 100, cancellationToken).ConfigureAwait(false);
+                */
 
                 //to avoid duplicated encounter when snipe priority pokemon
 
@@ -219,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.EventDispatcher.Send(new PokeStopListEvent(forts, nearbyPokemons));
 
             var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons)
-                .Where(pokemon=>LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) <= session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
+                .Where(pokemon=>LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) <= session.Client.GlobalSettings.MapSettings.EncounterRangeMeters * 3)
                 .OrderBy(
                     i =>
                         LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,

@@ -49,12 +49,12 @@ namespace RocketBot2.Forms
             }
 
             StreamReader auth = new StreamReader(AuthFilePath);
-            Auth.LoadJsonToTreeView(auth.ReadToEnd());
+            Auth.LoadJsonToTreeView(auth.ReadToEnd(), "Auth");
             //JsonTreeView.ExpandAll();
             auth.Close();
 
             StreamReader config = new StreamReader(ConfigFilePath);
-            Config.LoadJsonToTreeView(config.ReadToEnd());
+            Config.LoadJsonToTreeView(config.ReadToEnd(), "Config");
             //JsonTreeView.ExpandAll();
             config.Close();
         }
@@ -115,6 +115,7 @@ namespace RocketBot2.Forms
             gMapCtrl.DisableFocusOnMouseEnter = true;
 
             tbWalkingSpeed.Text = _settings.LocationConfig.WalkingSpeedInKilometerPerHour.ToString(CultureInfo.InvariantCulture);
+            cbStartFromLastPosition.Checked = _settings.LocationConfig.StartFromLastPosition;
 
             #endregion
 
@@ -324,8 +325,11 @@ namespace RocketBot2.Forms
         #region private methods
         private static float ConvertStringToFloat(string input)
         {
-            float.TryParse(input, out float output);
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
+            float output;
+            float.TryParse(input, out output);
             return output;
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
         private static List<PokemonId> ConvertClbToList(CheckedListBox input)
         {
@@ -521,6 +525,7 @@ namespace RocketBot2.Forms
                 _settings.LocationConfig.DefaultLatitude = Convert.ToDouble(tbLatitude.Text);
                 _settings.LocationConfig.DefaultLongitude = Convert.ToDouble(tbLongitude.Text);
                 _settings.LocationConfig.WalkingSpeedInKilometerPerHour = Convert.ToDouble(tbWalkingSpeed.Text);
+                _settings.LocationConfig.StartFromLastPosition = cbStartFromLastPosition.Checked;
 
                 #endregion
 
@@ -812,7 +817,11 @@ namespace RocketBot2.Forms
         {
             cbUsePogoDevAPI.Checked = !cbUseLegacyAPI.Checked;
         }
-        #endregion
 
-    }
+        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            gMapCtrl.Dispose();
+        }
+        #endregion
+    }       
 }

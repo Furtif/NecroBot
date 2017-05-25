@@ -20,7 +20,6 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class App : Application
     {
-        
         public App()
         {
             ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -92,20 +91,10 @@ namespace PoGo.Necrobot.Window
             });
 
             if (Settings.Default.ConsoleToggled == true)
-            {
                 ConsoleHelper.ShowConsoleWindow();
-                Settings.Default.ConsoleText = "Hide Console";
-                Settings.Default.Save();
-            }
-            else if (Settings.Default.ConsoleToggled == false)
-            {
+            if (Settings.Default.ConsoleToggled == false)
                 ConsoleHelper.HideConsoleWindow();
-                Settings.Default.ConsoleText = "Show Console";
-                Settings.Default.Save();
-            }
-            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
-            Settings.Default.Save();
-
+            
             MainWindow.Show();
         }
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)

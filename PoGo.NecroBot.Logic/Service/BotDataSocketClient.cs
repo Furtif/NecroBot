@@ -20,6 +20,8 @@ using System.Reflection;
 using TinyIoC;
 using static PoGo.NecroBot.Logic.Service.AnalyticsService;
 using Pogo;
+using PoGo.NecroBot.Logic.Utils;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Service
 {
@@ -86,11 +88,18 @@ namespace PoGo.NecroBot.Logic.Service
 
         public static async Task HandleEvent(AnalyticsEvent e, ISession session)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
             Pokemon data = e.Data as Pokemon;
+            ulong encounterId;
+            var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+            var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+            if (distance > maxDistance)
+                return;
+            
             switch (e.EventType)
             {
                 case 1:
-                    if (ulong.TryParse(data.EncounterId, out ulong encounterId))
+                    if (ulong.TryParse(data.EncounterId, out encounterId))
                     {
                         var encounteredEvent = new EncounteredEvent
                         {
@@ -143,6 +152,7 @@ namespace PoGo.NecroBot.Logic.Service
                     MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
                     break;
             }
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         public static void Listen(IEvent evt, ISession session)
@@ -398,6 +408,8 @@ namespace PoGo.NecroBot.Logic.Service
         //static int count = 0;
         private static void OnPokemonData(ISession session, string message)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
+            ulong encounterid;
             var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
@@ -408,7 +420,12 @@ namespace PoGo.NecroBot.Logic.Service
                     return;
                 };
 
-                ulong.TryParse(data.EncounterId, out ulong encounterid);
+                var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+                var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+                if (distance > maxDistance)
+                    return;
+
+                ulong.TryParse(data.EncounterId, out encounterid);
                 if (encounterid > 0 && cache.Get(encounterid.ToString()) == null)
                 {
                     cache.Add(encounterid.ToString(), DateTime.Now, DateTime.Now.AddMinutes(15));
@@ -447,10 +464,13 @@ namespace PoGo.NecroBot.Logic.Service
                     }
                 }
             }
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         private static void OnSnipePokemon(ISession session, string message)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
+            ulong encounterid;
             var match = Regex.Match(message, "42\\[\"snipe-pokemon\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Value) && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
@@ -465,7 +485,7 @@ namespace PoGo.NecroBot.Logic.Service
                 var move2 = PokemonMove.Absorb;
                 Enum.TryParse(data.Move1, true, out move1);
                 Enum.TryParse(data.Move1, true, out move2);
-                ulong.TryParse(data.EncounterId, out ulong encounterid);
+                ulong.TryParse(data.EncounterId, out encounterid);
 
                 bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, encounterid,
                     session);
@@ -491,6 +511,7 @@ namespace PoGo.NecroBot.Logic.Service
                     Move2 = move2
                 }, true).Wait();
             }
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
         private static Queue<string> servers = new Queue<string>();
         public static Task StartAsync(Session session, string encryptKey,

@@ -246,6 +246,7 @@
             this.label51 = new System.Windows.Forms.Label();
             this.tbRandomRecycleValue = new System.Windows.Forms.TextBox();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.cbStartFromLastPosition = new System.Windows.Forms.CheckBox();
             this.cbShowWalkingSpeed = new System.Windows.Forms.CheckBox();
             this.cbUseWalkingSpeedVariant = new System.Windows.Forms.CheckBox();
             this.cbDisableHumanWalking = new System.Windows.Forms.CheckBox();
@@ -262,8 +263,10 @@
             this.label50 = new System.Windows.Forms.Label();
             this.tbDelayBetweenPokemonCatch = new System.Windows.Forms.TextBox();
             this.tabAuthJson = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.Auth = new System.Windows.Forms.TreeView();
-            this.tabConfigJson = new System.Windows.Forms.TabPage();
+            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.Config = new System.Windows.Forms.TreeView();
             this.saveBtn = new System.Windows.Forms.Button();
             this.cbAutoSniper = new System.Windows.Forms.CheckBox();
@@ -312,7 +315,16 @@
             this.groupBox16.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.tabAuthJson.SuspendLayout();
-            this.tabConfigJson.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
+            this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
+            this.splitContainer5.Panel1.SuspendLayout();
+            this.splitContainer5.SuspendLayout();
             this.SuspendLayout();
             // 
             // cancelBtn
@@ -337,7 +349,6 @@
             this.tabControl.Controls.Add(this.tabItems);
             this.tabControl.Controls.Add(this.tabAdvSetting);
             this.tabControl.Controls.Add(this.tabAuthJson);
-            this.tabControl.Controls.Add(this.tabConfigJson);
             this.tabControl.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -893,7 +904,7 @@
             // 
             this.tbAuthAPIKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbAuthAPIKey.Location = new System.Drawing.Point(98, 39);
+            this.tbAuthAPIKey.Location = new System.Drawing.Point(95, 39);
             this.tbAuthAPIKey.Name = "tbAuthAPIKey";
             this.tbAuthAPIKey.Size = new System.Drawing.Size(239, 27);
             this.tbAuthAPIKey.TabIndex = 37;
@@ -903,7 +914,7 @@
             this.label67.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(6, 42);
+            this.label67.Location = new System.Drawing.Point(3, 44);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(86, 20);
             this.label67.TabIndex = 36;
@@ -1622,7 +1633,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(412, 573);
+            this.groupBox1.Size = new System.Drawing.Size(412, 593);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Exclude Transfer";
@@ -1967,7 +1978,7 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(413, 573);
+            this.groupBox4.Size = new System.Drawing.Size(413, 593);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Power Up";
@@ -2147,7 +2158,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(412, 580);
+            this.groupBox3.Size = new System.Drawing.Size(412, 600);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Evolve";
@@ -2622,6 +2633,7 @@
             // 
             // groupBox16
             // 
+            this.groupBox16.Controls.Add(this.cbStartFromLastPosition);
             this.groupBox16.Controls.Add(this.cbShowWalkingSpeed);
             this.groupBox16.Controls.Add(this.cbUseWalkingSpeedVariant);
             this.groupBox16.Controls.Add(this.cbDisableHumanWalking);
@@ -2633,10 +2645,21 @@
             this.groupBox16.Controls.Add(this.tbMaxTravelDistanceInMeters);
             this.groupBox16.Location = new System.Drawing.Point(8, 7);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(430, 200);
+            this.groupBox16.Size = new System.Drawing.Size(430, 252);
             this.groupBox16.TabIndex = 19;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Walking Behavior";
+            // 
+            // cbStartFromLastPosition
+            // 
+            this.cbStartFromLastPosition.AutoSize = true;
+            this.cbStartFromLastPosition.BackColor = System.Drawing.Color.Transparent;
+            this.cbStartFromLastPosition.Location = new System.Drawing.Point(10, 200);
+            this.cbStartFromLastPosition.Name = "cbStartFromLastPosition";
+            this.cbStartFromLastPosition.Size = new System.Drawing.Size(174, 24);
+            this.cbStartFromLastPosition.TabIndex = 31;
+            this.cbStartFromLastPosition.Text = "StartFromLastPosition";
+            this.cbStartFromLastPosition.UseVisualStyleBackColor = false;
             // 
             // cbShowWalkingSpeed
             // 
@@ -2726,9 +2749,9 @@
             this.groupBox15.Controls.Add(this.tbDelayBetweenPlayerActions);
             this.groupBox15.Controls.Add(this.label50);
             this.groupBox15.Controls.Add(this.tbDelayBetweenPokemonCatch);
-            this.groupBox15.Location = new System.Drawing.Point(8, 213);
+            this.groupBox15.Location = new System.Drawing.Point(8, 265);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(430, 169);
+            this.groupBox15.Size = new System.Drawing.Size(430, 178);
             this.groupBox15.TabIndex = 18;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Action Behavior";
@@ -2779,47 +2802,84 @@
             // 
             // tabAuthJson
             // 
-            this.tabAuthJson.Controls.Add(this.Auth);
+            this.tabAuthJson.Controls.Add(this.splitContainer2);
             this.tabAuthJson.Location = new System.Drawing.Point(4, 29);
             this.tabAuthJson.Name = "tabAuthJson";
             this.tabAuthJson.Padding = new System.Windows.Forms.Padding(3);
             this.tabAuthJson.Size = new System.Drawing.Size(969, 476);
             this.tabAuthJson.TabIndex = 6;
-            this.tabAuthJson.Text = "Auth.json";
+            this.tabAuthJson.Text = "Auth & Config";
             this.tabAuthJson.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer4);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer5);
+            this.splitContainer2.Size = new System.Drawing.Size(963, 470);
+            this.splitContainer2.SplitterDistance = 472;
+            this.splitContainer2.TabIndex = 3;
+            // 
+            // splitContainer4
+            // 
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer4.Name = "splitContainer4";
+            // 
+            // splitContainer4.Panel1
+            // 
+            this.splitContainer4.Panel1.Controls.Add(this.Auth);
+            // 
+            // splitContainer4.Panel2
+            // 
+            this.splitContainer4.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer4.Size = new System.Drawing.Size(472, 470);
+            this.splitContainer4.SplitterDistance = 264;
+            this.splitContainer4.TabIndex = 3;
             // 
             // Auth
             // 
             this.Auth.AllowDrop = true;
             this.Auth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Auth.LabelEdit = true;
-            this.Auth.Location = new System.Drawing.Point(3, 3);
+            this.Auth.Location = new System.Drawing.Point(0, 0);
             this.Auth.Margin = new System.Windows.Forms.Padding(4);
             this.Auth.Name = "Auth";
-            this.Auth.Size = new System.Drawing.Size(963, 470);
+            this.Auth.Size = new System.Drawing.Size(264, 470);
             this.Auth.TabIndex = 2;
             // 
-            // tabConfigJson
+            // splitContainer5
             // 
-            this.tabConfigJson.Controls.Add(this.Config);
-            this.tabConfigJson.Location = new System.Drawing.Point(4, 29);
-            this.tabConfigJson.Name = "tabConfigJson";
-            this.tabConfigJson.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConfigJson.Size = new System.Drawing.Size(969, 476);
-            this.tabConfigJson.TabIndex = 5;
-            this.tabConfigJson.Text = "Config.json";
-            this.tabConfigJson.UseVisualStyleBackColor = true;
+            this.splitContainer5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer5.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer5.Name = "splitContainer5";
+            // 
+            // splitContainer5.Panel1
+            // 
+            this.splitContainer5.Panel1.Controls.Add(this.Config);
+            this.splitContainer5.Size = new System.Drawing.Size(487, 470);
+            this.splitContainer5.SplitterDistance = 272;
+            this.splitContainer5.TabIndex = 3;
             // 
             // Config
             // 
             this.Config.AllowDrop = true;
             this.Config.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Config.LabelEdit = true;
-            this.Config.Location = new System.Drawing.Point(3, 3);
+            this.Config.Location = new System.Drawing.Point(0, 0);
             this.Config.Margin = new System.Windows.Forms.Padding(4);
             this.Config.Name = "Config";
-            this.Config.Size = new System.Drawing.Size(963, 470);
-            this.Config.TabIndex = 1;
+            this.Config.Size = new System.Drawing.Size(272, 470);
+            this.Config.TabIndex = 2;
             // 
             // saveBtn
             // 
@@ -2919,6 +2979,7 @@
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "RocketBot2 Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsForm_FormClosing);
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.tabControl.ResumeLayout(false);
             this.tabAuth.ResumeLayout(false);
@@ -2987,7 +3048,16 @@
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
             this.tabAuthJson.ResumeLayout(false);
-            this.tabConfigJson.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.splitContainer4.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
+            this.splitContainer4.ResumeLayout(false);
+            this.splitContainer5.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).EndInit();
+            this.splitContainer5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3216,8 +3286,6 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.TextBox tbDataServiceIdentification;
         private System.Windows.Forms.CheckBox cbUseHumanlikeDelays;
-        private System.Windows.Forms.TabPage tabConfigJson;
-        private System.Windows.Forms.TreeView Config;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPosition;
         private System.Windows.Forms.TabPage tabDevice;
@@ -3237,5 +3305,10 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.CheckedListBox clbSnipePokemonFilter;
         private System.Windows.Forms.CheckBox cbSnipePokemonFilterAll;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.CheckBox cbStartFromLastPosition;
+        private System.Windows.Forms.SplitContainer splitContainer4;
+        private System.Windows.Forms.SplitContainer splitContainer5;
+        private System.Windows.Forms.TreeView Config;
     }
 }

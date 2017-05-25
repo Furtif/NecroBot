@@ -14,14 +14,18 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
+using System.Linq;
 
 #endregion
 
-namespace PoGo.NecroBot.CLI
+namespace PoGo.NecroBot.Logic.Service
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    internal class ConsoleEventListener
+    public class ConsoleEventListener
     {
+        public delegate void HumanWalkEventDelegate(HumanWalkingEvent e);
+        public static event HumanWalkEventDelegate HumanWalkEvent;
+
         private static void HandleEvent(ProfileEvent profileEvent, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.EventProfileLogin,
@@ -37,9 +41,8 @@ namespace PoGo.NecroBot.CLI
         {
 
             //move to resource later
-            if (e.IsRemoteEvent) {
+            if (e.IsRemoteEvent)
                 Logger.Write($"Expired snipe pokemon has been removed from queue : {e.Data.PokemonId} ");
-        }
         }
 
         private static void HandleEvent(NoticeEvent noticeEvent, ISession session)
@@ -92,7 +95,9 @@ namespace PoGo.NecroBot.CLI
             string strPokemon = session.Translation.GetPokemonTranslation(pokemonEvolveEvent.Id);
             string logMessage = pokemonEvolveEvent.Result == EvolvePokemonResponse.Types.Result.Success
                 ? session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedSuccess, strPokemon,
-                    pokemonEvolveEvent.Exp)
+                    pokemonEvolveEvent.EvolvedPokemon.PokemonId,
+                    pokemonEvolveEvent.Exp,
+                    pokemonEvolveEvent.Candy)
                 : session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedFailed, pokemonEvolveEvent.Id,
                     pokemonEvolveEvent.Result,
                     strPokemon);
@@ -120,10 +125,13 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonUpgraded,
                     session.Translation.GetPokemonTranslation(upgradePokemonEvent.PokemonId),
+                    upgradePokemonEvent.Lvl,
                     upgradePokemonEvent.Cp.ToString(),
                     upgradePokemonEvent.Perfection.ToString("0.00"),
                     upgradePokemonEvent.BestCp.ToString(),
-                    upgradePokemonEvent.BestPerfection.ToString("0.00")),
+                    upgradePokemonEvent.BestPerfection.ToString("0.00"),
+                    upgradePokemonEvent.USD,
+                    upgradePokemonEvent.Candy.ToString()),
                 LogLevel.LevelUp);
         }
 
@@ -156,7 +164,8 @@ namespace PoGo.NecroBot.CLI
                     ? session.Translation.GetTranslation(TranslationString.IncubatorPuttingEgg,
                         eggIncubatorStatusEvent.KmRemaining)
                     : session.Translation.GetTranslation(TranslationString.IncubatorStatusUpdate,
-                        eggIncubatorStatusEvent.KmRemaining),
+                        eggIncubatorStatusEvent.KmRemaining,
+                        eggIncubatorStatusEvent.KmToWalk),
                 LogLevel.Egg);
         }
 
@@ -165,11 +174,15 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(
                 session.Translation.GetTranslation(
                     TranslationString.IncubatorEggHatched,
+                    eggHatchedEvent.Dist,
                     session.Translation.GetPokemonTranslation(eggHatchedEvent.PokemonId),
                     eggHatchedEvent.Level,
                     eggHatchedEvent.Cp,
                     eggHatchedEvent.MaxCp,
-                    eggHatchedEvent.Perfection
+                    eggHatchedEvent.Perfection,
+                    eggHatchedEvent.HXP,
+                    eggHatchedEvent.HSD,
+                    eggHatchedEvent.HCandy
                 ),
                 LogLevel.Egg);
         }
@@ -182,7 +195,7 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
                     fortUsedEvent.Exp, fortUsedEvent.Gems,
-                    itemString, fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude),
+                    itemString, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude),
                 LogLevel.Pokestop);
         }
 
@@ -290,7 +303,9 @@ namespace PoGo.NecroBot.CLI
                     pokemonCaptureEvent.Perfection.ToString("0.00"), pokemonCaptureEvent.Probability,
                     pokemonCaptureEvent.Distance.ToString("F2"),
                     returnRealBallName(pokemonCaptureEvent.Pokeball), pokemonCaptureEvent.BallAmount,
-                    pokemonCaptureEvent.Exp, familyCandies, pokemonCaptureEvent.Latitude.ToString("0.000000"),
+                    pokemonCaptureEvent.Exp,
+                    pokemonCaptureEvent.Stardust,
+                    familyCandies, pokemonCaptureEvent.Latitude.ToString("0.000000"),
                     pokemonCaptureEvent.Longitude.ToString("0.000000"),
                     pokemonCaptureEvent.Move1, pokemonCaptureEvent.Move2, pokemonCaptureEvent.Rarity,
                     pokemonCaptureEvent.CaptureReason,
@@ -309,6 +324,7 @@ namespace PoGo.NecroBot.CLI
                     pokemonCaptureEvent.Perfection.ToString("0.00"), pokemonCaptureEvent.Probability,
                     pokemonCaptureEvent.Distance.ToString("F2"),
                     returnRealBallName(pokemonCaptureEvent.Pokeball), pokemonCaptureEvent.BallAmount,
+                    pokemonCaptureEvent.Exp,
                     pokemonCaptureEvent.Latitude.ToString("0.000000"),
                     pokemonCaptureEvent.Longitude.ToString("0.000000"),
                     pokemonCaptureEvent.Move1, pokemonCaptureEvent.Move2, pokemonCaptureEvent.Rarity
@@ -507,6 +523,8 @@ namespace PoGo.NecroBot.CLI
                     LogLevel.Info,
                     ConsoleColor.DarkCyan
                 );
+
+            HumanWalkEvent?.Invoke(humanWalkingEvent);
         }
 
         private static void HandleEvent(KillSwitchEvent killSwitchEvent, ISession session)
@@ -603,7 +621,7 @@ namespace PoGo.NecroBot.CLI
 
         private static void HandleEvent(GymDetailInfoEvent ev, ISession session)
         {
-            Logger.Write($"Visited  Gym : {ev.Name} | Team {ev.Team}  | Gym points {ev.Point}", LogLevel.Gym,
+            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point}", LogLevel.Gym,
                 (ev.Team == TeamColor.Red)
                     ? ConsoleColor.Red
                     : (ev.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
@@ -612,13 +630,16 @@ namespace PoGo.NecroBot.CLI
         //TODO - move to string translation later.
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
-            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending for GYM {ev.Name}",
+            var GXP = session.RuntimeStatistics.TotalExperience;
+            var GSD = session.Inventory.GetStarDust();
+
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | XP: {GXP} | SD: {GSD}",
                 LogLevel.Gym, ConsoleColor.Green);
         }
 
         private static void HandleEvent(GymBattleStarted ev, ISession session)
         {
-            Logger.Write($"Battle has Started with gym: {ev.GymName}...", LogLevel.Gym, ConsoleColor.Blue);
+            Logger.Write($"Battle started at gym: {ev.GymName}...", LogLevel.Gym, ConsoleColor.Blue);
         }
 
         private static void HandleEvent(GymErrorUnset ev, ISession session)
@@ -667,14 +688,14 @@ namespace PoGo.NecroBot.CLI
         private static void HandleEvent(EventUsedPotion ev, ISession session)
         {
             Logger.Write(
-                $"Used a Potion: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaning: {ev.Remaining}"
+                $"Used {ev.Type} Potion on {ev.PokemonId} with CP: {ev.PokemonCp}. Remaning: {ev.Remaining}"
             );
         }
 
         private static void HandleEvent(EventUsedRevive ev, ISession session)
         {
             Logger.Write(
-                $"Used Revive: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaining: {ev.Remaining}"
+                $"Used {ev.Type} Revive on {ev.PokemonId} with CP: {ev.PokemonCp}. Remaining: {ev.Remaining}"
             );
         }
 
@@ -682,7 +703,7 @@ namespace PoGo.NecroBot.CLI
         {
         }
 
-        internal void Listen(IEvent evt, ISession session)
+        public void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
 
