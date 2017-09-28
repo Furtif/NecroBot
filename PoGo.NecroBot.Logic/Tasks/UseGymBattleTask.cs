@@ -32,7 +32,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static FortDetailsResponse _gymInfo { get; set; }
         private static GymGetInfoResponse _gymDetails { get; set; }
         private static IEnumerable<PokemonData> _deployedPokemons { get; set; }
-        private static IEnumerable<PokemonData> _defenders { get; set; }
         private static FortData _gym { get; set; }
         private static ISession _session;
 
@@ -444,101 +443,108 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DeployPokemonToGym()
         {
-           var availableSlots = MaxPlayers - _defenders.Count();
-
-            if (availableSlots > 0)
+            try
             {
-                var deployed = await _session.Inventory.GetDeployedPokemons().ConfigureAwait(false);
-                if (!deployed.Any(a => a.DeployedFortId == _gymInfo.FortId))
-                {
-                    PokemonData pokemon = await GetDeployablePokemon().ConfigureAwait(false);
-                    if (pokemon != null)
-                    {
-                        GymDeployResponse response = new GymDeployResponse(await _session.Client.Fort.GymDeploy(_gymInfo.FortId, pokemon.Id).ConfigureAwait(false));
-                        switch(response.Result)
-                        {
-                            case GymDeployResponse.Types.Result.ErrorAlreadyHasPokemonOnFort:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Already Has Pokemon On Fort", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorFortDeployLockout:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error For tDeploy Lockout", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorFortIsFull:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Fort Is Full", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorInvalidPokemon:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Invalid Pokemon", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorLegendaryPokemon:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Legendary Pokemon", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorNotAPokemon:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Not A Pokemon", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorNotInRange:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Not In Range", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorOpposingTeamOwnsFort:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Opposing Team Owns Fort", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Below Minimum Level", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPlayerHasNoNickname:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Has No Nickname", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPlayerHasNoTeam:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Has No Team", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPoiInaccessible:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Poi Inaccessible", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPokemonIsBuddy:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Pokemon Is Buddy", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorPokemonNotFullHp:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Pokemon Not Full Hp", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorRaidActive:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Raid Active", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorTeamDeployLockout:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Team Deploy Lockout", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorTooManyDeployed:
-                                _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Too Many Deployed", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.ErrorTooManyOfSameKind:
-                                _session.EventDispatcher.Send(new GymEventMessages() {Message = "Failed to deploy pokemon. Result: Error Too Many Of Same Kind", consoleColor = ConsoleColor.Red });
-                                break;
-                            case GymDeployResponse.Types.Result.NoResultSet:
-                                _session.EventDispatcher.Send(new GymEventMessages() {Message = "Failed to deploy pokemon.Result: No Result Set", consoleColor = ConsoleColor.Red } );
-                                break;
-                            case GymDeployResponse.Types.Result.Success:
-                                _session.EventDispatcher.Send(new GymDeployEvent()
-                                {
-                                    PokemonId = pokemon.PokemonId,
-                                    Name = _gymDetails.Name
-                                });
+                var availableSlots = MaxPlayers - _gymDetails.GymStatusAndDefenders.GymDefender.Count();
 
-                                _session.GymState.CapturedGymId = _gym.Id;
-                                break;
+                if (availableSlots > 0)
+                {
+                    var deployed = await _session.Inventory.GetDeployedPokemons().ConfigureAwait(false);
+                    if (!deployed.Any(a => a.DeployedFortId == _gymInfo.FortId))
+                    {
+                        PokemonData pokemon = await GetDeployablePokemon().ConfigureAwait(false);
+                        if (pokemon != null)
+                        {
+                            GymDeployResponse response = new GymDeployResponse(await _session.Client.Fort.GymDeploy(_gymInfo.FortId, pokemon.Id).ConfigureAwait(false));
+                            switch (response.Result)
+                            {
+                                case GymDeployResponse.Types.Result.ErrorAlreadyHasPokemonOnFort:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Already Has Pokemon On Fort", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorFortDeployLockout:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error For tDeploy Lockout", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorFortIsFull:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Fort Is Full", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorInvalidPokemon:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Invalid Pokemon", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorLegendaryPokemon:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Legendary Pokemon", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorNotAPokemon:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Not A Pokemon", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorNotInRange:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Not In Range", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorOpposingTeamOwnsFort:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Opposing Team Owns Fort", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Below Minimum Level", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPlayerHasNoNickname:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Has No Nickname", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPlayerHasNoTeam:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Player Has No Team", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPoiInaccessible:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Poi Inaccessible", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPokemonIsBuddy:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Pokemon Is Buddy", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorPokemonNotFullHp:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Pokemon Not Full Hp", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorRaidActive:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Raid Active", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorTeamDeployLockout:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Team Deploy Lockout", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorTooManyDeployed:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Too Many Deployed", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.ErrorTooManyOfSameKind:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon. Result: Error Too Many Of Same Kind", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.NoResultSet:
+                                    _session.EventDispatcher.Send(new GymEventMessages() { Message = "Failed to deploy pokemon.Result: No Result Set", consoleColor = ConsoleColor.Red });
+                                    break;
+                                case GymDeployResponse.Types.Result.Success:
+                                    _session.EventDispatcher.Send(new GymDeployEvent()
+                                    {
+                                        PokemonId = pokemon.PokemonId,
+                                        Name = _gymDetails.Name
+                                    });
+
+                                    _session.GymState.CapturedGymId = _gym.Id;
+                                    break;
+                            }
                         }
+                        else
+                            Logger.Write($"You don't have any pokemon to be deployed!", LogLevel.Gym);
                     }
                     else
-                        Logger.Write($"You don't have any pokemon to be deployed!", LogLevel.Gym);
+                        Logger.Write($"You already have pokemon deployed here", LogLevel.Gym);
                 }
                 else
-                    Logger.Write($"You already have pokemon deployed here", LogLevel.Gym);
-            }
-            else
-            {
-                int allCp = 0;
-                foreach (var x in _defenders)
-                    allCp = allCp + x.Cp;
+                {
+                    int allCp = 0;
+                    foreach (var x in _gymDetails.GymStatusAndDefenders.GymDefender.Select(p => p.MotivatedPokemon.Pokemon).ToList())
+                        allCp = allCp + x.Cp;
 
-                string message = string.Format("No FREE slots in GYM: {0}/{1} (All Cp: {2})", _gymDetails.GymStatusAndDefenders.GymDefender.Count(), MaxPlayers, allCp);
-                Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
+                    string message = string.Format("No FREE slots in GYM: {0}/{1} (All Cp: {2})", _gymDetails.GymStatusAndDefenders.GymDefender.Count(), MaxPlayers, allCp);
+                    Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Logger.Write("Error Null Reference Exception", LogLevel.Gym, ConsoleColor.Red);
             }
         }
 
@@ -1101,7 +1107,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write(string.Format("Last retrieved action was: {0}", a2), LogLevel.Gym, ConsoleColor.Red);
                         Logger.Write(string.Format("Actions to perform were: {0}", string.Join(", ", attackActionz)), LogLevel.Gym, ConsoleColor.Red);
                         Logger.Write(string.Format("Attacker was: {0}, defender was: {1}", attacker, defender), LogLevel.Gym, ConsoleColor.Red);
-                        continue;
+                        return lastActions;
                     };
 
                     switch (attackResult.Result)
@@ -1406,6 +1412,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Gym Details: API Bad Request Exception", LogLevel.Gym, ConsoleColor.Red);
                 return null;
             }
+            catch (NullReferenceException e)
+            {
+                e.Data.Clear();
+                Logger.Write("Gym Details: Null Reference Exception", LogLevel.Gym, ConsoleColor.Red);
+                return null;
+            }
         }
 
         private static async Task EnsureJoinTeam(PlayerData player)
@@ -1429,38 +1441,60 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CanAttackGym()
         {
-            if (!_session.LogicSettings.GymConfig.EnableAttackGym)
-                return false;
-
-            if (_gym?.RaidInfo != null)
+            try
             {
-                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                if (!_session.LogicSettings.GymConfig.EnableAttackGym)
                     return false;
+
+                if (_gym?.RaidInfo != null)
+                {
+                    if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                        return false;
+                }
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool CanAttackRaid()
         {
-            if (!_session.LogicSettings.GymConfig.EnableAttackRaid)
-                return false;
-
-            if (_gym?.RaidInfo != null)
+            try
             {
-                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
-                    return true;
+                if (!_session.LogicSettings.GymConfig.EnableAttackRaid)
+                    return false;
+
+                if (_gym?.RaidInfo != null)
+                {
+                    if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                        return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool CanBerrieGym()
         {
-            if (!_session.LogicSettings.GymConfig.EnableGymBerries)
-                return false;
+            try
+            {
+                if (!_session.LogicSettings.GymConfig.EnableGymBerries)
+                    return false;
 
-            if (!_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
+                //Only berries if my pokemon is into gym
+                if (!_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
+                    return false;
+                return true;
+            }
+            catch
+            {
                 return false;
-            return true;
+            }
         }
 
         private static bool CanDeployToGym()
