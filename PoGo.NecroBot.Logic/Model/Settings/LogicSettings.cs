@@ -103,6 +103,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
         public int ByPassSpinCount => _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
+        public bool EvolvePreserveMinCandiesFromFilter => _settings.PokemonConfig.EvolvePreserveMinCandiesFromFilter;
         public bool EvolveFavoritedOnly => _settings.PokemonConfig.EvolveFavoritedOnly;
         public string EvolveOperator => _settings.PokemonConfig.EvolveOperator;
         public double EvolveMinIV => _settings.PokemonConfig.EvolveMinIV;
@@ -186,6 +187,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double RecycleInventoryAtUsagePercentage => GenRandom(_settings.RecycleConfig.RecycleInventoryAtUsagePercentage);
         public double EvolveKeptPokemonsAtStorageUsagePercentage => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage);
         public int EvolveKeptPokemonIfBagHasOverThisManyPokemon => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonIfBagHasOverThisManyPokemon);
+        public bool EvolveKeptPokemonsIfLuckyEggCanBeUsed => _settings.PokemonConfig.EvolveKeptPokemonsIfLuckyEggCanBeUsed;
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters => _settings.ItemUseFilters;
 
         public ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter => _settings.ItemRecycleFilter.Select(itemRecycleFilter => new KeyValuePair<ItemId, int>(itemRecycleFilter.Key, itemRecycleFilter.Value)).ToList();
