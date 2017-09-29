@@ -549,7 +549,8 @@ namespace PoGo.NecroBot.Window
 
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://snipe.necrobot2.com?donate");
+            // RB Donor Link, until NecroBot gets a New Donor Page
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SNATC29B4ZJD4");
         }
 
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)

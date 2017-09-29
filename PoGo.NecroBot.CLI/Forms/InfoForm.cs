@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void DonateLogo_Click(object sender, EventArgs e)
         {
-            Process.Start("http://www.mypogosnipers.com/?donate");
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SNATC29B4ZJD4");
         }
 
         private void Link_click(object sender, LinkLabelLinkClickedEventArgs e)
