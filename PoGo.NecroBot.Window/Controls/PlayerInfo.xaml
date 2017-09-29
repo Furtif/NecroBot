@@ -98,7 +98,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" Text="{Binding Lucky_expires, FallbackValue=LuckyEggs: 00m 00s, StringFormat=LuckyEggs: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" Text="{Binding Lucky_expires, FallbackValue=Lucky Eggs: 00m 00s, StringFormat=Lucky Eggs: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
             <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" Text="{Binding Insence_expires, FallbackValue=Insence: 00m 00s, StringFormat=Insence: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
         </Grid>
     </DockPanel>

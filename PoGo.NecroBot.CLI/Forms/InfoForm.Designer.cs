@@ -1,4 +1,4 @@
-﻿namespace PoGo.NecroBot.CLI.Forms
+namespace PoGo.NecroBot.CLI.Forms
 {
     partial class InfoForm
     {
@@ -39,8 +39,6 @@
             this.lnkWiki = new System.Windows.Forms.LinkLabel();
             this.WikiLabel = new System.Windows.Forms.Label();
             this.Description = new System.Windows.Forms.Label();
-            this.SnipeLink2 = new System.Windows.Forms.LinkLabel();
-            this.SnipeLink1 = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -160,36 +158,11 @@
             this.Description.TabIndex = 8;
             this.Description.Text = resources.GetString("Description.Text");
             // 
-            // SnipeLink2
-            // 
-            this.SnipeLink2.AutoSize = true;
-            this.SnipeLink2.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.SnipeLink2.Location = new System.Drawing.Point(17, 343);
-            this.SnipeLink2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.SnipeLink2.Name = "SnipeLink2";
-            this.SnipeLink2.Size = new System.Drawing.Size(158, 23);
-            this.SnipeLink2.TabIndex = 9;
-            this.SnipeLink2.TabStop = true;
-            this.SnipeLink2.Text = "http://msniper.com";
-            // 
-            // SnipeLink1
-            // 
-            this.SnipeLink1.AutoSize = true;
-            this.SnipeLink1.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.SnipeLink1.Location = new System.Drawing.Point(17, 309);
-            this.SnipeLink1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.SnipeLink1.Name = "SnipeLink1";
-            this.SnipeLink1.Size = new System.Drawing.Size(213, 23);
-            this.SnipeLink1.TabIndex = 10;
-            this.SnipeLink1.TabStop = true;
-            this.SnipeLink1.Text = "http://mypogosnipers.com";
-            this.SnipeLink1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.label7.Location = new System.Drawing.Point(514, 352);
+            this.label7.Location = new System.Drawing.Point(514, 330);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(235, 19);
@@ -229,12 +202,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(762, 380);
+            this.ClientSize = new System.Drawing.Size(762, 360);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.SnipeLink1);
-            this.Controls.Add(this.SnipeLink2);
             this.Controls.Add(this.Description);
             this.Controls.Add(this.lnkWiki);
             this.Controls.Add(this.WikiLabel);
@@ -271,8 +242,6 @@
         private System.Windows.Forms.LinkLabel lnkWiki;
         private System.Windows.Forms.Label WikiLabel;
         private System.Windows.Forms.Label Description;
-        private System.Windows.Forms.LinkLabel SnipeLink2;
-        private System.Windows.Forms.LinkLabel SnipeLink1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.LinkLabel linkLabel1;

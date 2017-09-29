@@ -20,6 +20,7 @@ namespace PoGo.NecroBot.Window.Model
             set
             {
                 lucky_expires = value;
+                RaisePropertyChanged("Lucky_expires");
             }
         }
         private string insence_expires;
@@ -29,6 +30,7 @@ namespace PoGo.NecroBot.Window.Model
             set
             {
                 insence_expires = value;
+                RaisePropertyChanged("Insence_expires");
             }
         }
         public PokemonId BuddyPokemonId { get; set; }
